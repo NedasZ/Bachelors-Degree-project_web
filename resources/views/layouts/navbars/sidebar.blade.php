@@ -78,6 +78,23 @@
             </form>
             <!-- Navigation -->
             <ul class="navbar-nav">
+                <!-- mano navbar v----------------------------------->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('event.setup') }}">
+                        <i class="ni ni-active-40 text-primary"></i> {{ __('Event Creation') }}
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('home') }}">
+                        <i class="ni ni-active-40 text-primary"></i> {{ __('Event List') }}
+                    </a>
+                </li>
+
+                <!-- mano navbar ^----------------------------------->
+
+
+
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
                         <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}

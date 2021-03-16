@@ -10,6 +10,16 @@ class Event extends Model
     use HasFactory;
 
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = [
+        'name',
+        'maps_id',
+    ];
+
     public function users()
     {
         return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id');
@@ -22,6 +32,6 @@ class Event extends Model
 
     public function gps_locations()
     {
-        return $this->hasMany(gps_locations::class); // Ar klases modeli reikia sukurti?
+        return $this->hasMany(gps_location::class); // Ar klases modeli reikia sukurti?
     }
 }
