@@ -19,15 +19,19 @@
         <link href="{{ asset('argon') }}/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
         <!-- Argon CSS -->
         <link type="text/css" href="{{ asset('argon') }}/css/argon.css?v=1.0.0" rel="stylesheet">
+        
+        <!-- Leaflet  -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     </head>
     <body class="{{ $class ?? '' }}">
         @auth()
             <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                 @csrf
             </form>
-            @include('layouts.navbars.sidebar')
+            
         @endauth
-        
+        @include('layouts.navbars.sidebar')
         <div class="main-content">
             @include('layouts.navbars.navbar')
             @yield('content')

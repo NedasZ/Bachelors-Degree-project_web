@@ -1,3 +1,4 @@
+
 <nav class="navbar navbar-vertical fixed-left navbar-expand-md navbar-light bg-white" id="sidenav-main">
     <div class="container-fluid">
         <!-- Toggler -->
@@ -79,14 +80,21 @@
             <!-- Navigation -->
             <ul class="navbar-nav">
                 <!-- mano navbar v----------------------------------->
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('event.setup') }}">
-                        <i class="ni ni-active-40 text-primary"></i> {{ __('Event Creation') }}
+                
+                @if(Auth::check())  <!-- Ar Gerai taip?? -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('event.setup') }}">
+                            <i class="ni ni-active-40 text-primary"></i> {{ __('Event Creation') }}
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" href="{{ route('user_event_list') }}">
+                        <i class="ni ni-active-40 text-primary"></i> {{ __('My Events') }}
                     </a>
                 </li>
-
+                @endif
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}">
+                    <a class="nav-link" href="{{ route('event_list') }}">
                         <i class="ni ni-active-40 text-primary"></i> {{ __('Event List') }}
                     </a>
                 </li>

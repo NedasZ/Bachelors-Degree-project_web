@@ -17,8 +17,7 @@ class CreateGpsLocationsTable extends Migration
             $table->id();
             $table->integer('user_id'); //?
             $table->integer('event_id'); //?
-            $table->string('location'); //10?
-            $table->datetime('time_of_measure');
+            $table->json('locations'); // lat + long + time
             $table->timestamps();
         });
     }

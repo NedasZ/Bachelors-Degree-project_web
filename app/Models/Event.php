@@ -17,12 +17,12 @@ class Event extends Model
      */
     protected $fillable = [
         'name',
-        'maps_id',
+        'description',
     ];
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id');
+        return $this->belongsToMany(User::class, 'event_user', 'event_id', 'user_id')->withTimestamps()->withPivot('role','result');
     }
 
     public function map()

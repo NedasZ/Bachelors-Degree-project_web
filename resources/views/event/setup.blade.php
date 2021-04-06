@@ -24,7 +24,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <form method="post" action="{{ route('profile.update') }}" autocomplete="off">
+                        <form method="post" action="{{ route('event.publish') }}" autocomplete="off">
                             @csrf
                             @method('put')
 
@@ -48,17 +48,7 @@
                                         </span>
                                     @endif
                                 </div>
-                                <div class="form-group">
-                                    <label for="existingMapSelect">Map Select</label>
-                                    <select class="form-control" id="existingMapSelect">
-                                    <option>None</option>
-                                    <option>map1</option>
-                                    <option>map2</option>
-                                    <option>map3</option>
-                                    <option>map4</option>
-                                    <option>map5</option>
-                                    </select>
-                                </div>
+                                
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Create') }}</button>
                                 </div>

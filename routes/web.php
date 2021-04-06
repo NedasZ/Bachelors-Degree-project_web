@@ -16,6 +16,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/event_list', [App\Http\Controllers\EventController::class, 'list_all'])->name('event_list');
+Route::get('/event_list/event/{event_id}', [App\Http\Controllers\EventController::class, 'event_info']);
+
 Auth::routes();
 
 Route::get('/home', 'App\Http\Controllers\HomeController@index')->name('home');
@@ -32,7 +36,13 @@ Route::group(['middleware' => 'auth'], function () {
 	// Mano Routes
 	Route::get('event', ['as' => 'event.setup', 'uses' => 'App\Http\Controllers\EventController@setup']);
 	Route::put('event', ['as' => 'event.publish', 'uses' => 'App\Http\Controllers\EventController@publish']);
+	Route::get('event_list/user', [App\Http\Controllers\EventController::class, 'list_user'])->name('user_event_list');
+	Route::get('event_list/event/{event_id}/edit', [App\Http\Controllers\EventController::class, 'event_edit']);
+	Route::put('event_list/event/{event_id}/edit', [App\Http\Controllers\EventController::class, 'event_update'])->name('event_update');
+	Route::post('map_upload', [App\Http\Controllers\EventController::class, 'map_upload'])->name('upload_map');
+	Route::post('map_update', [App\Http\Controllers\EventController::class, 'map_update'])->name('map_update');
 });
+
 
 
 Auth::routes();
