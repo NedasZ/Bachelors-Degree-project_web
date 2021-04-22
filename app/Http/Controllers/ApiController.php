@@ -33,6 +33,7 @@ class ApiController extends Controller
         $user = User::create($input); 
         $success['token'] =  $user->createToken('MyApp')-> accessToken; 
         $success['name'] =  $user->name;
+        $success['userid'] =  $user->id;
         return response()->json(['success'=>$success], $this-> successStatus); 
     }
 
@@ -41,6 +42,8 @@ class ApiController extends Controller
         if(Auth::attempt(['email' => request('email'), 'password' => request('password')])){ 
             $user = Auth::user(); 
             $success['token'] =  $user->createToken('MyApp')-> accessToken; 
+            $success['name'] =  $user->name;
+            $success['userid'] =  $user->id;
             return response()->json(['success' => $success], $this-> successStatus); 
         } 
         else{ 
