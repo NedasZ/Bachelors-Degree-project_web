@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Validator;
 use App\Http\Resources\EventUserResource;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 
 
 class ApiController extends Controller
@@ -60,17 +62,25 @@ class ApiController extends Controller
 
     public function joinEvent($eventName, Request $request){
         
-        $event = Event::where('name','=',$eventName)->firstOrFail();
-        $user = Auth::user();
+        try
+        {
+            $event = Event::where('name','=',$eventName)->firstOrFail();
+            $user = Auth::user();
+            //$mapurl = $event->ma
 
-        if(!$user->events->contains('id', $event->id))
-        {
-            $event->users()->attach($user->id, ['role' => '4']);
-            return response()->json(['eventData' => $event, 'message' => 'joined first'], $this-> successStatus);
+            if(!$user->events->contains('id', $event->id))
+            {
+                $event->users()->attach($user->id, ['role' => '4']);
+                return response()->json(['eventData' => $event, 'map' => $event->map, 'message' => 'joined first'], $this-> successStatus);
+            }
+            else
+            {
+                return response()->json(['eventData' => $event, 'map' => $event->map, 'message' => 'already joined'], $this-> successStatus);
+            }
         }
-        else
+        catch(ModelNotFoundException $e)
         {
-            return response()->json(['eventData' => $event, 'message' => 'already joined'], $this-> successStatus);
+            return response()->json([ 'error' => 'eventNotFound'], 403);
         }
     }
 
@@ -115,6 +125,7 @@ class ApiController extends Controller
         $user = User::findOrFail($userId);
 
         $events = $user->events()->get();
+        
 
         return response()->json(['eventData' => $events], $this-> successStatus);
     }
