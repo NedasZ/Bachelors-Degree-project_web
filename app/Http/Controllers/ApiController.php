@@ -67,15 +67,14 @@ class ApiController extends Controller
             $event = Event::where('name','=',$eventName)->firstOrFail();
             $user = Auth::user();
             //$mapurl = $event->ma
-
             if(!$user->events->contains('id', $event->id))
             {
                 $event->users()->attach($user->id, ['role' => '4']);
-                return response()->json(['eventData' => $event, 'map' => $event->map, 'message' => 'joined first'], $this-> successStatus);
+                return response()->json(['eventData' => $event, 'map' => $event->map, 'user' => $event->users()->where('user_id',$user->id)->get(), 'message' => 'joined first'], $this-> successStatus);
             }
             else
             {
-                return response()->json(['eventData' => $event, 'map' => $event->map, 'message' => 'already joined'], $this-> successStatus);
+                return response()->json(['eventData' => $event, 'map' => $event->map, 'user' => $event->users()->where('user_id',$user->id)->get(), 'message' => 'already joined'], $this-> successStatus);
             }
         }
         catch(ModelNotFoundException $e)
