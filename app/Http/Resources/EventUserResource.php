@@ -16,6 +16,7 @@ class EventUserResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'location' => $this->location,
             'name' => $this->name,
             'email' => $this->email,
             'role' => $this->pivot->role,

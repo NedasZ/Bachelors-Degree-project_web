@@ -87,6 +87,16 @@ class ApiController extends Controller
         $event = Event::findOrFail($eventId);
         $users = EventUserResource::collection($event->users()->get());
 
+        foreach($users as $user){
+            $locations = gps_location::where('user_id', $user->id)->orderBy('id', 'DESC')->take(1)->get();
+            foreach($locations as $loc)
+            {
+                $array = json_decode($loc->locations);
+                $user->location = $array[0];
+            }
+            
+        }
+
         return response()->json(['eventData' => $event, 'users' => $users], $this-> successStatus);
     }
 
