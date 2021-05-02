@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Event;
-use App\Models\Map;
 use App\Models\Gps_location;
+use App\Models\Map;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
 use Validator;
@@ -153,6 +153,7 @@ class ApiController extends Controller
                 }
 
         $input = $request->all(); 
+        
         $gps_locations = Gps_location::create($input); 
         
         return response()->json(['message'=>'upload succeeded', 'data'=>$gps_locations], $this-> successStatus); 
