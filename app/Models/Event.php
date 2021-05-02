@@ -34,8 +34,5 @@ class Event extends Model
     {
         return $this->hasMany(Gps_location::class); 
     }
-    public function locations()
-    {
-        return $this->hasMany(Location::class); // Ar klases modeli reikia sukurti?
-    }
+   
 }

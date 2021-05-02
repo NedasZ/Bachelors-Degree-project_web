@@ -52,8 +52,4 @@ class User extends Authenticatable
     {
         return $this->hasMany(Gps_location::class); // Ar klases modeli reikia sukurti?
     }  
-    public function locations()
-    {
-        return $this->hasMany(Location::class); // Ar klases modeli reikia sukurti?
-    }  
 }
