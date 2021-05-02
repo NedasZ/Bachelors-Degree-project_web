@@ -9,6 +9,8 @@ class Gps_location extends Model
 {
     use HasFactory;
 
+    //hello
+    
     protected $fillable = [
         'user_id',
         'event_id',
