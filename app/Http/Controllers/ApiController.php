@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Event;
-use app\Models\Gps_location;
+use App\App\Models\Gps_location;
 use App\Models\Map;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\Hash;
