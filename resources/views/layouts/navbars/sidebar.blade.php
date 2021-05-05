@@ -102,7 +102,7 @@
                 <!-- mano navbar ^----------------------------------->
 
 
-
+<!-- 
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('home') }}">
                         <i class="ni ni-tv-2 text-primary"></i> {{ __('Dashboard') }}
@@ -156,12 +156,12 @@
                         <i class="ni ni-cloud-download-95"></i> Upgrade to PRO
                     </a>
                 </li>
-            </ul>
-            <!-- Divider -->
-            <hr class="my-3">
-            <!-- Heading -->
+            </ul> -->
+            
+            <!-- <hr class="my-3">
+        
             <h6 class="navbar-heading text-muted">Documentation</h6>
-            <!-- Navigation -->
+            
             <ul class="navbar-nav mb-md-3">
                 <li class="nav-item">
                     <a class="nav-link" href="https://argon-dashboard-laravel.creative-tim.com/docs/getting-started/overview.html">
@@ -178,7 +178,7 @@
                         <i class="ni ni-ui-04"></i> Components
                     </a>
                 </li>
-            </ul>
+            </ul> -->
         </div>
     </div>
 </nav>

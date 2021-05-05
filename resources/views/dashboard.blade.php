@@ -3,7 +3,7 @@
 @section('content')
     @include('layouts.headers.cards')
     
-    <div class="container-fluid mt--7">
+    <!-- <div class="container-fluid mt--7">
         <div class="row">
             <div class="col-xl-8 mb-5 mb-xl-0">
                 <div class="card bg-gradient-default shadow">
@@ -32,9 +32,9 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Chart -->
+                      
                         <div class="chart">
-                            <!-- Chart wrapper -->
+                      
                             <canvas id="chart-sales" class="chart-canvas"></canvas>
                         </div>
                     </div>
@@ -51,7 +51,7 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <!-- Chart -->
+                      
                         <div class="chart">
                             <canvas id="chart-orders" class="chart-canvas"></canvas>
                         </div>
@@ -73,7 +73,7 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <!-- Projects table -->
+                        
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
@@ -172,7 +172,6 @@
                         </div>
                     </div>
                     <div class="table-responsive">
-                        <!-- Projects table -->
                         <table class="table align-items-center table-flush">
                             <thead class="thead-light">
                                 <tr>
@@ -277,7 +276,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> -->
 
         @include('layouts.footers.auth')
     </div>

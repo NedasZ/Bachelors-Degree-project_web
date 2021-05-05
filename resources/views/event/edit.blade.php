@@ -92,7 +92,7 @@
                                     <div class="col-4">
                                         <form method="post" action="{{ route('map_update') }}" autocomplete="off">
                                             @csrf
-                                            @method('put')
+                                            @method('post')
 
                                             <h6 class="heading-small text-muted mb-4">{{ __('Map information') }}</h6>
                                             
@@ -119,7 +119,7 @@
                                                 </div>
                                                 <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                                     <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
-                                                    <textarea type="text" rows="3" name="description" id="input-description" class="form-control form-control-alternative{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('email', $event->description) }}" required></textarea>
+                                                    <textarea type="text" rows="3" name="description" id="input-description" class="form-control form-control-alternative{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{$map->description}}" required></textarea>
 
                                                     @if ($errors->has('description'))
                                                         <span class="invalid-feedback" role="alert">
@@ -134,12 +134,21 @@
                                                     <label class="form-control-label" for="input-map_lng">{{ __('Logitude') }}</label>
                                                     <input style="text-align: right;" type="text" name="map_lng" id="map_lng" class="form-control" placeholder="{{ __('000') }}" required>
 
-                                                    <label class="form-control-label" for="input-map_hgt">{{ __('Height') }}</label>
+                                                    <label class="form-control-label" for="input-map_hgt">{{ __('Height (mm)') }}</label>
                                                     <input style="text-align: right;" type="text" name="map_hgt" id="map_hgt" class="form-control" placeholder="{{ __('000') }}" required>
 
-                                                    <label class="form-control-label" for="map_wdt">{{ __('Width') }}</label>
+                                                    <label class="form-control-label" for="map_wdt">{{ __('Width (mm)') }}</label>
                                                     <input style="text-align: right;" type="text" name="map_wdt" id="map_wdt" class="form-control" placeholder="{{ __('000') }}" required>
-                                                    
+
+                                                    <label class="form-control-label" for="map_scale">{{ __('Scale (1:X)') }}</label>
+                                                    <input style="text-align: right;" type="text" name="map_scale" id="map_scale" class="form-control" placeholder="{{ __('000') }}" required>
+
+                                                    <label class="form-control-label" for="map_rotation">{{ __('Rotation') }}</label>
+                                                    <input style="text-align: right;" type="text" name="map_rotation" id="map_rotation" class="form-control" placeholder="{{ __('000') }}" required>
+
+                                                    <label class="form-control-label" for="map_opacity">{{ __('Opacity') }}</label>
+                                                    <input style="text-align: right;" type="text" name="map_opacity" id="map_opacity" class="form-control" placeholder="{{ __('000') }}" required>
+                                                    <input type="hidden" id="map_id" name="map_id" value="{{$map->id}}">
                                                 </div>                                          
                                                 <div class="text-left">
                                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
@@ -148,92 +157,141 @@
                                         </form>
                                     </div>
                                  </div>
+                                 <style>
+                                    .olclass {
+                                        transform-origin: center center !important;
+                                    }   
+                                 </style>
                                  <script>
-                                            function bringmarkertocenter(){
-                                                moveMarker(marker,map.getCenter());
+
+                                    var string = "{{$map->map_display_info}}";
+                                    var pos = string.replace(/&quot;/g,"\"");                                            
+                                    var map_display_info = JSON.parse(pos);
+                                    var lat_start = parseFloat(map_display_info.latitude);
+                                    var lng_start = parseFloat(map_display_info.longitude);
+
+                                    function bringmarkertocenter(){
+                                        moveMarker(marker,map.getCenter());
+                                    }
+                                    function mapfocusesmarker(){
+                                        map.setView(marker.getLatLng());
+                                    }
+
+                                    var map = L.map('map').setView([lat_start, lng_start], 16).setMinZoom(8);
+
+                                    //map
+                                    L.tileLayer('https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=2rZzSd8qs4TLWUESyE3I',
+                                    {
+                                        attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+                                    }).addTo(map);
+
+                                    //marker
+                                    var marker = new L.marker([lat_start, lng_start], {draggable:'true'});
+                                    
+                                    
+                                    //console.log(map_display_info);
+
+                                    
+                                   
+                                    
+                                    
+                                    
+                                    
+
+                                    map.addLayer(marker);
+                                    var latlng = [marker.getLatLng()];
+                                    var polyline = L.polyline(latlng, {color: 'red'}).addTo(map);
+                                    
+                                    //map parameters
+                                    var width = 210; 
+                                    width = parseFloat(map_display_info.width);    
+                                    var element_wdt = document.getElementById("map_wdt");
+                                    element_wdt.value = width;
+
+                                    var height = 297;
+                                    height = parseFloat(map_display_info.height);
+                                    var element_hgt = document.getElementById("map_hgt");
+                                    element_hgt.value = height;
+
+                                    var scale = 10000;
+                                    scale = parseFloat(map_display_info.scale);
+                                    var element_scale = document.getElementById("map_scale");
+                                    element_scale.value = scale;
+
+                                    var rotation = 0;
+                                    rotation = parseFloat(map_display_info.rotation);
+                                    var element_rotation = document.getElementById("map_rotation");
+                                    element_rotation.value = rotation;
+
+                                    var m_opacity = 0.5;
+                                    var element_opacity = document.getElementById("map_opacity");
+                                    element_opacity.value = m_opacity;
+
+                                    var element_lat = document.getElementById("map_lat");
+                                    element_lat.value =marker.getLatLng().lat;
+
+                                    var element_lng = document.getElementById("map_lng");
+                                    element_lng.value =marker.getLatLng().lng;
+                                    
+                                    var imageBounds = [[(-height * scale * 0.001 / 111111) + marker.getLatLng().lat, width*scale*0.001/ (111111 * Math.cos(marker.getLatLng().lat * (Math.PI/180)) ) + marker.getLatLng().lng], marker.getLatLng()];
+                                    image = L.imageOverlay('{{$map->url}}',imageBounds,{opacity: m_opacity}).addTo(map);
+                                    image.getElement().classList.add('olclass');
+                                    
+                                    
+                                    marker.on('dragend', function(event){
+                                            var marker = event.target;
+                                            var position = marker.getLatLng();
+                                            moveMarker(marker, position);
+                                        });
+                                    
+                                    function moveMarker(mark, pos)
+                                    {
+                                        mark.setLatLng(new L.LatLng(pos.lat, pos.lng),{draggable:'true'});
+                                        image.setBounds( [[ pos.lat + (-height * scale * 0.001 / 111111), pos.lng +  width*scale*0.001/ (111111 *Math.cos(pos.lat * (Math.PI/180)))], [pos.lat, pos.lng]]);
+                                        
+                                        image.getElement().style.transform = image.getElement().style.transform.replace(/ rotate\(.+\)/, "");
+                                        image.getElement().style.transform += " rotate("+rotation+"deg)";
+
+                                        element_lat.value = pos.lat;
+
+                                        
+                                        element_lng.value = pos.lng;
+                                        
+                                        if(latlng.length > 5){
+                                            latlng.shift();
+                                        }
+                                        latlng.push([pos.lat, pos.lng]);
+                                        
+                                        polyline.setLatLngs(latlng);
+                                    }
+
+                                    function updatemap()
+                                    {
+                                        
+                                        height = element_hgt.value;
+                                        width = element_wdt.value;
+                                        scale = element_scale.value;
+                                        m_opacity = element_opacity.value;
+                                        rotation = element_rotation.value;
+
+                                        if(element_lat.value != marker.getLatLng().lat || element_lng.value != marker.getLatLng().lng){
+                                            marker.setLatLng(new L.LatLng(element_lat.value, element_lng.value),{draggable:'true'});
+                                            if(latlng.length > 5){
+                                                latlng.shift();
                                             }
-                                            function mapfocusesmarker(){
-                                                map.setView(marker.getLatLng());
-                                            }
+                                            latlng.push([element_lat.value, element_lng.value]);
+                                            polyline.setLatLngs(latlng);
+                                        }
 
-                                            var map = L.map('map').setView([54.900796, 23.900176], 16).setMinZoom(8);
+                                        
 
-                                            //map
-                                            L.tileLayer('https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=2rZzSd8qs4TLWUESyE3I',
-                                            {
-                                                attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
-                                            }).addTo(map);
-
-                                            //marker
-                                            var marker = new L.marker(map.getCenter(), {draggable:'true'});
-                                            
-                                            map.addLayer(marker);
-                                            var latlng = [marker.getLatLng()];
-                                            var polyline = L.polyline(latlng, {color: 'red'}).addTo(map);
-                                            
-                                            //map parameters
-                                            var width = 2019; 
-                                            var element_wdt = document.getElementById("map_wdt");
-                                            element_wdt.value = width;
-
-                                            var height = 1400;
-                                            var element_hgt = document.getElementById("map_hgt");
-                                            element_hgt.value = height;
-
-                                            var element_lat = document.getElementById("map_lat");
-                                            element_lat.value = marker.getLatLng().lat;
-
-                                            var element_lng = document.getElementById("map_lng");
-                                            element_lng.value = marker.getLatLng().lng;
-                                            
-
-                                            var imageBounds = [[-height * 0.000003 + marker.getLatLng().lat, width*0.000003+marker.getLatLng().lng], marker.getLatLng()];
-                                            image = L.imageOverlay('{{$map->url}}',imageBounds,{opacity:0.5}).addTo(map);
-                                            
-                                            
-                                            marker.on('dragend', function(event){
-                                                    var marker = event.target;
-                                                    var position = marker.getLatLng();
-                                                    moveMarker(marker, position);
-                                                });
-                                            
-                                            function moveMarker(mark, pos)
-                                            {
-                                                mark.setLatLng(new L.LatLng(pos.lat, pos.lng),{draggable:'true'});
-                                                    image.setBounds( [[ pos.lat - height * 0.000003, pos.lng + width*0.000003], [pos.lat, pos.lng]]);
-
-                                                    element_lat.value = pos.lat;
-
-                                                   
-                                                    element_lng.value = pos.lng;
-                                                    
-                                                    if(latlng.length > 5){
-                                                        latlng.shift();
-                                                    }
-                                                    latlng.push([pos.lat, pos.lng]);
-                                                    
-                                                    polyline.setLatLngs(latlng);
-                                            }
-
-                                            function updatemap()
-                                            {
-                                                
-                                                height = element_hgt.value;
-                                                width = element_wdt.value;
-
-                                                if(element_lat.value != marker.getLatLng().lat || element_lng.value != marker.getLatLng().lng){
-                                                    marker.setLatLng(new L.LatLng(element_lat.value, element_lng.value),{draggable:'true'});
-                                                    if(latlng.length > 5){
-                                                        latlng.shift();
-                                                    }
-                                                    latlng.push([element_lat.value, element_lng.value]);
-                                                    polyline.setLatLngs(latlng);
-                                                }
-
-                                                image.setBounds([[ marker.getLatLng().lat - height * 0.000003, marker.getLatLng().lng + width*0.000003], [marker.getLatLng().lat, marker.getLatLng().lng]]);
-                                            }
-                                            //image and position
-                                        </script>
+                                        image.setOpacity(m_opacity);
+                                        image.setBounds([[ marker.getLatLng().lat + (-height * scale * 0.001 / 111111), marker.getLatLng().lng + width*scale*0.001/(111111 * Math.cos(marker.getLatLng().lat * (Math.PI/180)) )], [marker.getLatLng().lat, marker.getLatLng().lng]]);
+                                        image.getElement().style.transform = image.getElement().style.transform.replace(/ rotate\(.+\)/, "");
+                                        image.getElement().style.transform += " rotate("+rotation+"deg)";
+                                    }
+                                    //image and position
+                                </script>
                             </div>
                         @else
                             <p> map upload 

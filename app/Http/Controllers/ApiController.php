@@ -87,6 +87,7 @@ class ApiController extends Controller
         $event = Event::findOrFail($eventId);
         $users = EventUserResource::collection($event->users()->get());
 
+
         foreach($users as $user){
             $locations = gps_location::where('user_id', $user->id)->orderBy('id', 'DESC')->take(1)->get();
             foreach($locations as $loc)
@@ -96,7 +97,6 @@ class ApiController extends Controller
             }
             
         }
-
         return response()->json(['eventData' => $event, 'users' => $users], $this-> successStatus);
     }
 
@@ -104,7 +104,7 @@ class ApiController extends Controller
         
         $validator = Validator::make($request->all(), [ 
             'users.*.id' => 'required|integer', 
-            'users.*.role' => 'required|integer|min:2|max:4', 
+            'users.*.role' => 'required|integer|min:0|max:4', 
         ]);
         if ($validator->fails()) { 
                     return response()->json(['error'=>$validator->errors()], 403);            

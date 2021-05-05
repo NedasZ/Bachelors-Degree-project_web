@@ -33,9 +33,18 @@
                         <p> {{$event->description}} </p>
                         @isset($map)
                             <div class="col-md-3">
-                                <div id = "map", style="height: 700px;width: 700px;"></div>
+                                <div id = "map", style="height: 700px;width: 700px;">
+                                    <div style="padding-right: 20px; padding-top: 30px; pointer-events: auto" class="leaflet-right leaflet-top">
+                                        <button  class="btn btn-primary btn-sm" id="Btn-update_map" onclick="updatemap()" >Fix Map</button>
+                                    </div>
+                                </div>
+                                <style>
+                                    .olclass {
+                                        transform-origin: center center !important;
+                                    }   
+                                </style>
                                 <script>
-                                    var map = L.map('map').setView([54.900796, 23.900176], 16);
+                                    
 
                                     //map
                                     /*
@@ -47,15 +56,35 @@
 
                                     //map_image
                                     
-                                    var height = 2019;
-                                    var width = 1400;
-                                    var imageBounds = [[-width * 0.000003 + 54.900796, height*0.000003+23.900176], [54.900796, 23.900176]];
-                                    image = L.imageOverlay('{{$map->url}}',imageBounds,{opacity:0.8}).addTo(map);
+                                    var string = "{{$map->map_display_info}}";
+                                    var pos = string.replace(/&quot;/g,"\"");
                                     
+                                    var map_display_info = JSON.parse(pos);
+                                    //console.log(map_display_info);
+
+                                    var height = parseFloat(map_display_info.height);
+                                    var width = parseFloat(map_display_info.width);    
+                                    var scale = parseFloat(map_display_info.scale);
+                                    var rotation = parseFloat(map_display_info.rotation);
+                                    var lat = parseFloat(map_display_info.latitude);
+                                    var lng = parseFloat(map_display_info.longitude);
+                            
+                                    var map = L.map('map').setView([lat, lng], 16).setMinZoom(8);
+                                    var imageBounds = [[(-height * scale * 0.001 / 111111) + lat, width*scale*0.001/ (111111 * Math.cos(lat * (Math.PI/180)) ) + lng], [lat,lng]];
+                                    //var imageBounds = [[-width * 0.000003 + 54.900796, height*0.000003+23.900176], [54.900796, 23.900176]];
+                                    image = L.imageOverlay('{{$map->url}}',imageBounds,{opacity:0.8}).addTo(map);
+                                    image.getElement().classList.add('olclass');
+                                    image.getElement().style.transform = image.getElement().style.transform.replace(/ rotate\(.+\)/, "");
+                                    image.getElement().style.transform += " rotate("+rotation+"deg)";
+
 
                                     //image and position
-                                    
-                                    
+                                    function updatemap()
+                                    {
+                                        image.setBounds([[ lat + (-height * scale * 0.001 / 111111), lng + width*scale*0.001/(111111 * Math.cos(lat * (Math.PI/180)) )], [lat, lng]]);
+                                        image.getElement().style.transform = image.getElement().style.transform.replace(/ rotate\(.+\)/, "");
+                                        image.getElement().style.transform += " rotate("+rotation+"deg)";
+                                    }
                                 </script>       
                                 <!--
                                     <img src="{{$map->url}}" alt="{{$map->name}}" width="600">

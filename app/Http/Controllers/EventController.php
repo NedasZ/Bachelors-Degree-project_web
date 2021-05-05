@@ -73,7 +73,7 @@ class EventController extends Controller
             }
         }
 
-
+        //return($event->map);
         return view('event.info', ['event' => $event, 'user_role' => $role, 'map' => $event->map]);
     }
 
@@ -163,8 +163,22 @@ class EventController extends Controller
      */
     public function map_update(Request $request)
     {
-
-
+        $map = Map::findOrFail($request->map_id);
+        $map->name = $request->name;
+        $map->description = $request->description;
+        $position = array(
+            "latitude"=>$request->map_lat,
+            "longitude"=>$request->map_lng,
+            "height"=>$request->map_hgt,
+            "width"=>$request->map_wdt,
+            "scale"=>$request->map_scale,
+            "rotation"=>$request->map_rotation
+        );
+        
+        $map->map_display_info = $position;
+        $map->save();
+            
+        return $map;       
         return back()->withStatus(__('Map updated!'));
     }
 }

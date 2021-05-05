@@ -19,7 +19,8 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('si_card')->nullable();;
+            $table->string('si_card')->nullable();
+            $table->string('phonenumber')->nullable(); //reikia migrate
             $table->rememberToken();
             $table->timestamps();
         });
