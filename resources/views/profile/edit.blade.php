@@ -110,6 +110,26 @@
                                         </span>
                                     @endif
                                 </div>
+                                <div class="form-group{{ $errors->has('si_card') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-si_card">{{ __('Si Card') }}</label>
+                                    <input type="text" name="si_card" id="input-si_card" class="form-control form-control-alternative{{ $errors->has('si_card') ? ' is-invalid' : '' }}" placeholder="{{ __('000000') }}" value="{{ old('email', auth()->user()->si_card) }}" required>
+
+                                    @if ($errors->has('si_card'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('si_card') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                                <div class="form-group{{ $errors->has('phonenumber') ? ' has-danger' : '' }}">
+                                    <label class="form-control-label" for="input-phonenumber">{{ __('Phone number') }}</label>
+                                    <input type="text" name="phonenumber" id="input-phonenumber" class="form-control form-control-alternative{{ $errors->has('email') ? ' is-invalid' : '' }}" placeholder="{{ __('+370000000000') }}" value="{{ old('email', auth()->user()->phonenumber) }}" required>
+
+                                    @if ($errors->has('phonenumber'))
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $errors->first('phonenumber') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
 
                                 <div class="text-center">
                                     <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

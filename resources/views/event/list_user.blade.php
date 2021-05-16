@@ -26,8 +26,41 @@
                     
 
                     <!-- Stuff goes here, including list >:( -->
+                    @if ($events->count() > 0)
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th class="text-center">Id</th>
+                                <th>Name</th>
+                                <th>Map</th>
+                                <th class="text-right">Created_at</th>
+                                <th class="text-right">Updated_at</th>
+                            </tr>
+                        </thead>
+                       
+                                
+                        
+                        <tbody>
+                            @foreach($events as $event)
+                                <tr>
+                                    <td class="text-center">{{$event->id}}</td>
+                                    <td>
+                                        <a href="/event_list/event/{{$event->id}}">{{$event->name}} </a>
+                                    </td>
+                                    <td>{{$event->map_id}}</td>
+                                    <td class="text-right">{{$event->created_at}}</td>
+                                    <td class="text-right">{{$event->updated_at}}</td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                    @else
+                        <div class="card-body">
+                            <p> {{__('You haven\'t participated in any events yet.')}} </p>
+                        </div>
+                    @endif
 
-
+                    <!-- Stuff goes here, including list >:( -->
                 </div>
             </div>
         </div>

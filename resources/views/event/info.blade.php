@@ -70,6 +70,12 @@
                                     var lng = parseFloat(map_display_info.longitude);
                             
                                     var map = L.map('map').setView([lat, lng], 16).setMinZoom(8);
+
+                                    //map
+                                    L.tileLayer('https://api.maptiler.com/maps/bright/{z}/{x}/{y}.png?key=2rZzSd8qs4TLWUESyE3I',
+                                    {
+                                        attribution: '<a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'
+                                    }).addTo(map);
                                     var imageBounds = [[(-height * scale * 0.001 / 111111) + lat, width*scale*0.001/ (111111 * Math.cos(lat * (Math.PI/180)) ) + lng], [lat,lng]];
                                     //var imageBounds = [[-width * 0.000003 + 54.900796, height*0.000003+23.900176], [54.900796, 23.900176]];
                                     image = L.imageOverlay('{{$map->url}}',imageBounds,{opacity:0.8}).addTo(map);
@@ -77,6 +83,39 @@
                                     image.getElement().style.transform = image.getElement().style.transform.replace(/ rotate\(.+\)/, "");
                                     image.getElement().style.transform += " rotate("+rotation+"deg)";
 
+                                    var locations_string = "{{$user_locations}}";
+                                    locations_string = locations_string.replace(/&quot;/g,"\"");
+                                    var UserLocations = JSON.parse(locations_string);
+                                    
+                                    var UserLocationsArray = Object.entries(UserLocations);
+                                    //console.log(UserLocationsArray);
+                                    for(var i = 0; i<UserLocationsArray.length; i++){                                    
+                                        var latlng = [];
+                                        var a = UserLocationsArray[i];
+                                        
+                                        console.log(a);
+                                        //Check for participants you want to see.
+                                        if(a[0] == "12"){
+                                            var usr_loc = Object.entries(a[1]);
+                                            
+
+                                            for(var j = 0; j<usr_loc.length; j++)
+                                            {
+                                                
+                                                var l = usr_loc[j];
+                                                //console.log(l);
+                                                
+                                                var pos = [l[1].coords.latitude, l[1].coords.longitude];
+                                                
+                                                latlng.push(pos);     
+                                                                                    
+                                            }
+                                            
+
+                                            var polyline = L.polyline(latlng, {color: 'red'}).addTo(map);
+                                        }
+                                    }
+                                    // 
 
                                     //image and position
                                     function updatemap()

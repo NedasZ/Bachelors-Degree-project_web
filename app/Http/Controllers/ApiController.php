@@ -178,6 +178,9 @@ class ApiController extends Controller
         foreach($users as $user)
         {
             if($user->pivot->role == 1){
+                $event->status = 0;
+                $event->save();
+                
                 return response()->json(['message'=>'event has ended'], $this-> successStatus); 
             }
             else{

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\Event;
 use App\Models\Map;
-use App\Models\Gps_location;
+use App\Models\gps_location;
 //use App\Http\Requests\EventRequest; ??
 use Illuminate\Support\Facades\Hash; // ??
 use Illuminate\Foundation\Http\FormRequest; //??
@@ -44,7 +44,11 @@ class EventController extends Controller
      */
     public function list_user()
     {
-        return view('event.list_user');
+
+        $events = auth()->user()->events;
+        
+       
+        return view('event.list_user', ['events' => $events]);
     }
 
     /**
@@ -57,7 +61,7 @@ class EventController extends Controller
     public function event_info($event_id)
     {
         $event = Event::findOrFail($event_id);
-    
+        
         $role = 5;
 
         if(auth()->check()){
@@ -73,8 +77,33 @@ class EventController extends Controller
             }
         }
 
-        //return($event->map);
-        return view('event.info', ['event' => $event, 'user_role' => $role, 'map' => $event->map]);
+        $UserLocations = [];
+        $raw_locations= gps_location::where('event_id',$event_id)->get();
+        foreach($raw_locations as $rec){
+            $location_data = json_decode($rec->locations);
+            if(array_key_exists($rec->user_id, $UserLocations))
+            {
+                $array = $UserLocations[$rec->user_id];
+                foreach($location_data as $data){
+                    $data->location = json_decode($data->location);
+                    $array[$data->id] = $data->location;
+                }
+                ksort($array);
+                $UserLocations[$rec->user_id] = $array;
+            }
+            else{
+                $array = [];
+                foreach($location_data as $data){
+                    $data->location = json_decode($data->location);
+                    $array[$data->id] = $data->location;
+                }
+                ksort($array);
+                $UserLocations[$rec->user_id] = $array;
+            }
+        }
+
+        //return($UserLocations);
+        return view('event.info', ['event' => $event, 'user_role' => $role, 'map' => $event->map, 'user_locations' => json_encode($UserLocations)]);
     }
 
 
@@ -120,11 +149,11 @@ class EventController extends Controller
     {
     
         $user_id = auth()->user()->id;
-        $event_name = $request->name;
 
         $event = new Event;
 
         $event->name = $request->name;
+        $event->status = 1;
 
         
         $event->save();
@@ -180,5 +209,24 @@ class EventController extends Controller
             
         return $map;       
         return back()->withStatus(__('Map updated!'));
+    }
+
+    public function end_event(Request $request)
+    {
+        $event = new Event;
+        $users = $event->users()->where('user_id', auth()->user()->id)->get();
+
+        foreach($users as $user)
+        {
+            if($user->pivot->role == 1){
+                $event->status = 0;
+                $event->save();
+                
+                return back()->withStatus(__('Event '.$event->name.' has ended.'));
+            }
+            else{
+                return back()->withStatus(__('You can not end the '.$event->name.' event.'));
+            }
+        }
     }
 }

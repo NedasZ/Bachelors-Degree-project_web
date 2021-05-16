@@ -16,7 +16,8 @@ class CreateEventsTable extends Migration
         Schema::create('events', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->integer('status');//LIVE OR NOT -- REIKIA MIGRATE IS NAUJO
+            $table->integer('status');
+            $table->json('results')->nullable();
             $table->string('description')->nullable();
             $table->integer('map_id')->nullable();
             $table->timestamps();

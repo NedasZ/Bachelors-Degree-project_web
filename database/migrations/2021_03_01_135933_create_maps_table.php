@@ -16,9 +16,8 @@ class CreateMapsTable extends Migration
         Schema::create('maps', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('url'); // kaip paveiksliukai saugomi?
-            // Reikia pozicijos saugojimo
-            $table->json('map_display_info')->nullable(); // position lat-long + scale
+            $table->string('url');
+            $table->json('map_display_info')->nullable();
             $table->string('description')->nullable();
             $table->timestamps();
         });
