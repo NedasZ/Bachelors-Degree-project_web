@@ -89,7 +89,7 @@ class ApiController extends Controller
 
 
         foreach($users as $user){
-            $locations = gps_location::where('user_id', $user->id)->orderBy('id', 'DESC')->take(1)->get();
+            $locations = gps_location::where('user_id', $user->id)->where('event_id', $eventId)->orderBy('id', 'DESC')->take(1)->get();
             foreach($locations as $loc)
             {
                 $array = json_decode($loc->locations);
@@ -134,9 +134,32 @@ class ApiController extends Controller
         $user = User::findOrFail($userId);
 
         $events = $user->events()->get();
+        for($i = 0; $i < count($events); $i++){
+            $events[$i]-> results = null;
+        }
+        return response()->json(['eventData' => $events], $this-> successStatus);
+    }
+
+    
+    public function getUserEventData($userId, $eventId){
+        $user = User::findOrFail($userId);
+        $event = Event::findOrFail($eventId);
+        $result = '';
+        $results = json_decode($event->results)->results;
+        if($user->si_card != null){
+            foreach($results as $key => $value){
+                if($key == $user->si_card){
+                    $result = $value->time_data;
+                }
+            }
+        }
+         $event->results = $result;
         
 
-        return response()->json(['eventData' => $events], $this-> successStatus);
+
+        $locations = gps_location::where('user_id', $user->id)->where('event_id', $event->id)->orderBy('id', 'ASC')->get();
+
+        return response()->json(['eventData' => $event, 'userData' => $user, 'locations' => $locations], $this-> successStatus);
     }
 
     public function SaveResults(Request $request){

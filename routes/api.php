@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth:api'], function(){
     Route::get('event/{eventId}','App\Http\Controllers\ApiController@getEventData');
     Route::put('event/{eventId}/users','App\Http\Controllers\ApiController@editEventUsers');
     Route::get('userEvents/{userId}','App\Http\Controllers\ApiController@getUserEvents');
+    Route::get('userEvents/{userId}/{eventId}','App\Http\Controllers\ApiController@getUserEventData');
     Route::post('event/saveResults', 'App\Http\Controllers\ApiController@SaveResults');
     Route::post('event/saveLocation', 'App\Http\Controllers\ApiController@SaveUserLocation');
     Route::get('event/{eventId}/end','App\Http\Controllers\ApiController@endEvent');
