@@ -24,11 +24,29 @@
                             {{ __('Event Info!') }}
                             @if($user_role <= 2)
                             <a href="/event_list/event/{{$event->id}}/edit" class="badge badge-primary">Edit</a>
+                            <a href="/event_list/event/{{$event->id}}/getResults" onclick="return confirm('Are you sure?')" class="badge badge-primary">Refresh Results</a>
                             @endif
+                            <!-- @if($user_role == 1)
+                            <a href="/event_list/event/{{$event->id}}/end" onclick="return confirm('Are you sure?')" class="badge badge-primary">End Event</a>
+                            
+                            @endif -->
                             </h3>
                         </div>
                     </div>
+
+                            
+
                     <div class="card-body">
+
+                        @if (session('status'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('status') }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        @endif
+                        
                         <h3>{{$event->name}}</h3>
                         <p> {{$event->description}} </p>
                         @isset($map)
@@ -95,7 +113,7 @@
                                         
                                         console.log(a);
                                         //Check for participants you want to see.
-                                        if(a[0] == "12"){
+                                        //if(a[0] == "12"){
                                             var usr_loc = Object.entries(a[1]);
                                             
 
@@ -113,7 +131,7 @@
                                             
 
                                             var polyline = L.polyline(latlng, {color: 'red'}).addTo(map);
-                                        }
+                                        //}
                                     }
                                     // 
 
@@ -134,7 +152,39 @@
                         <p> no map </p>
                             </div>
                         @endisset
-                        <p> participants here </p>
+                        
+                        @if ($results != null)
+                            <p> Event participants: </p>
+                            <div class="col-md-3">
+                                <table class="table table-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Card</th>
+                                            <th>#</th>
+                                            <th>Date</th>
+                                            <th>Total time</th>
+                                            <th>Between time</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($results->results as $res)
+                                            <tr>
+                                                <th>{{$res->si_card}}</th>
+                                            </tr>
+                                            @foreach ($res->time_data as $data)
+                                                <tr>
+                                                    <th></th>
+                                                    <th>{{$data->code}} </th>
+                                                    <th>{{$data->date}} </th>
+                                                    <th>{{$data->time_total}} </th>
+                                                    <th>{{$data->time_between}}</th>
+                                                </tr>
+                                            @endforeach
+                                        @endforeach
+                                    </tbody>
+                                </table>  
+                            </div>   
+                        @endif
                     </div>
                 </div>
             </div>

@@ -60,13 +60,30 @@
                                     </div>
                                     <div class="form-group{{ $errors->has('description') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-description">{{ __('Description') }}</label>
-                                        <textarea rows="3" type="text" name="description" id="input-description" class="form-control form-control-alternative{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}" value="{{ old('email', $event->description) }}" required></textarea >
+                                        <textarea rows="3" type="text" name="description" id="input-description" class="form-control form-control-alternative{{ $errors->has('description') ? ' is-invalid' : '' }}" placeholder="{{ __('Description') }}">{{ old('description', $event->description) }}</textarea >
 
                                         @if ($errors->has('description'))
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $errors->first('description') }}</strong>
                                             </span>
                                         @endif
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('route') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-route">{{ __('Route') }}</label>
+                                        <p >{{ __('Event track point numbers need to be seperated by "-"') }}</p>
+                                        <p >{{ __('ex: 31-32-32-34-100') }}</p>
+                                        <input type="text" name="route" id="input-Route" class="form-control form-control-alternative{{ $errors->has('route') ? ' is-invalid' : '' }}" placeholder="{{ __('00-00-00-00') }}"></input >
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('si_eid') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-si_eid">{{ __('Si Center event id') }}</label>
+                                        <input type="text" name="si_eid" id="input-si_eid" class="form-control form-control-alternative{{ $errors->has('si_eid') ? ' is-invalid' : '' }}" placeholder="{{ __('1234') }}" value="{{ old('si_eid', $results->si_event_id) }}"></input >
+                                    </div>
+
+                                    <div class="form-group{{ $errors->has('si_api_key') ? ' has-danger' : '' }}">
+                                        <label class="form-control-label" for="input-si_api_key">{{ __('Si Center api key') }}</label>
+                                        <input rows="2" type="text" name="si_api_key" id="input-si_api_key" class="form-control form-control-alternative{{ $errors->has('si_api_key') ? ' is-invalid' : '' }}" placeholder="{{ __('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa') }}" value="{{ old('api_key', $results->si_api_key) }}"></input >
                                     </div>
                                     <div class="text-left">
                                         <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>

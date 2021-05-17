@@ -38,6 +38,8 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::put('event', ['as' => 'event.publish', 'uses' => 'App\Http\Controllers\EventController@publish']);
 	Route::get('event_list/user', [App\Http\Controllers\EventController::class, 'list_user'])->name('user_event_list');
 	Route::get('event_list/event/{event_id}/edit', [App\Http\Controllers\EventController::class, 'event_edit']);
+	Route::get('event_list/event/{event_id}/getResults', [App\Http\Controllers\EventController::class, 'event_get_results']);
+	Route::get('event_list/event/{event_id}/end', [App\Http\Controllers\EventController::class, 'end_event']);
 	Route::put('event_list/event/{event_id}/edit', [App\Http\Controllers\EventController::class, 'event_update'])->name('event_update');
 	Route::post('map_upload', [App\Http\Controllers\EventController::class, 'map_upload'])->name('upload_map');
 	Route::post('map_update', [App\Http\Controllers\EventController::class, 'map_update'])->name('map_update');
