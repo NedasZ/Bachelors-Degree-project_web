@@ -145,18 +145,17 @@ class ApiController extends Controller
         $user = User::findOrFail($userId);
         $event = Event::findOrFail($eventId);
         $result = '';
-        $results = json_decode($event->results)->results;
-        if($user->si_card != null){
-            foreach($results as $key => $value){
-                if($key == $user->si_card){
-                    $result = $value->time_data;
+        if($event->results != null){
+            $results = json_decode($event->results)->results;
+            if($user->si_card != null){
+                foreach($results as $key => $value){
+                    if($key == $user->si_card){
+                        $result = $value->time_data;
+                    }
                 }
             }
+            $event->results = $result;
         }
-         $event->results = $result;
-        
-
-
         $locations = gps_location::where('user_id', $user->id)->where('event_id', $event->id)->orderBy('id', 'ASC')->get();
 
         return response()->json(['eventData' => $event, 'userData' => $user, 'locations' => $locations], $this-> successStatus);

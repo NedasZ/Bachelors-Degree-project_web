@@ -78,12 +78,12 @@
 
                                     <div class="form-group{{ $errors->has('si_eid') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-si_eid">{{ __('Si Center event id') }}</label>
-                                        <input type="text" name="si_eid" id="input-si_eid" class="form-control form-control-alternative{{ $errors->has('si_eid') ? ' is-invalid' : '' }}" placeholder="{{ __('1234') }}" value="{{ old('si_eid', $results->si_event_id) }}"></input >
+                                        <input type="text" name="si_eid" id="input-si_eid" class="form-control form-control-alternative{{ $errors->has('si_eid') ? ' is-invalid' : '' }}" placeholder="{{ __('1234') }}" value="{{ isset($results) ? $results->si_event_id : null }}"></input >
                                     </div>
 
                                     <div class="form-group{{ $errors->has('si_api_key') ? ' has-danger' : '' }}">
                                         <label class="form-control-label" for="input-si_api_key">{{ __('Si Center api key') }}</label>
-                                        <input rows="2" type="text" name="si_api_key" id="input-si_api_key" class="form-control form-control-alternative{{ $errors->has('si_api_key') ? ' is-invalid' : '' }}" placeholder="{{ __('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa') }}" value="{{ old('api_key', $results->si_api_key) }}"></input >
+                                        <input rows="2" type="text" name="si_api_key" id="input-si_api_key" class="form-control form-control-alternative{{ $errors->has('si_api_key') ? ' is-invalid' : '' }}" placeholder="{{ __('aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa') }}" value="{{ isset($results) ? $results->si_api_key : null }}"></input >
                                     </div>
                                     <div class="text-left">
                                         <button type="submit" class="btn btn-success mt-4">{{ __('Save') }}</button>
