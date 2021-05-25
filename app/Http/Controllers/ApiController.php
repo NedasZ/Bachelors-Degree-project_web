@@ -99,7 +99,7 @@ class ApiController extends Controller
             }
             
         }
-        return response()->json(['locations' => $locations, 'users' => $users], $this-> successStatus);
+        //return response()->json(['locations' => $locations, 'users' => $users], $this-> successStatus);
         return response()->json(['eventData' => $event, 'users' => $users], $this-> successStatus);
     }
 
