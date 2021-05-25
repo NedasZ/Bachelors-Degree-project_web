@@ -226,7 +226,7 @@ class EventController extends Controller
         $map->map_display_info = $position;
         $map->save();
             
-        return $map;       
+        //return $map;       
         return back()->withStatus(__('Map updated!'));
     }
 
